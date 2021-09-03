@@ -8,17 +8,19 @@ class SnakeNotFoundError(KeyError):
 class LadderNotFoundError(KeyError):
     pass
 
+snake reg_snake, green_snake(visted, mouth, tail)
 
 class Board:
     def __init__(self):
         self.snakes = {
-            17: 7,
-            54: 34,
-            62: 19,
-            64: 60,
-            93: 73,
-            95: 75,
-            99: 78,
+
+            17: [7 ,1,0], # 
+            54: [34,0,0],
+            62: [19,0,0],
+            64: [60,0,0],
+            93: [73,0,0],
+            95: [75,0,0],
+            99: [78,0,0],
         }
 
         self.ladders = {
@@ -33,14 +35,20 @@ class Board:
         }
 
     def has_snake(self, pos):
-        return pos in self.snakes
+        if pos in self.snakes:
+            if self.snakes[pos][1]==1 and self.snakes[pos][2] == 1:
+                return False
+            return True
+        return False
 
     def has_ladder(self, pos):
         return pos in self.ladders
 
     def get_snake_tail(self, pos):
         if self.has_snake(pos):
-            return self.snakes[pos]
+            if self.snakes[pos][1] == 1:
+                self.snakes[pos][2] = 1
+            return self.snakes[pos][0]
         else:
             raise SnakeNotFoundError(f"Snake not found at pos, {pos}")
 
@@ -113,7 +121,7 @@ if __name__ == "__main__":
                 game_winner = player
                 break
             if player.position >= 100:
-                print(f"{player} losses run, next move beyond board")
+                print(f"{player} losses turn, next move beyond board")
                 player.position -= dice_value
                 continue
 
