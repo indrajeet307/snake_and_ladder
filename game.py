@@ -8,19 +8,42 @@ class SnakeNotFoundError(KeyError):
 class LadderNotFoundError(KeyError):
     pass
 
-snake reg_snake, green_snake(visted, mouth, tail)
+class Snake:
+    def __init__(self, tail_pos):
+        self.tail_pos = tail_pos
+
+    def is_alive(self):
+        return True
+
+    def get_tail(self):
+        return self.tail_pos
+
+class GreenSnake(Snake):
+    def __init__(self, tail_pos):
+        super().__init__(tail_pos)
+        self.visited = False
+
+    def is_alive(self):
+        return not self.visited
+
+    def get_tail(self):
+        if self.visited:
+            return 0
+        else:
+            self.visited = True
+            return self.tail_pos
+
 
 class Board:
     def __init__(self):
         self.snakes = {
-
-            17: [7 ,1,0], # 
-            54: [34,0,0],
-            62: [19,0,0],
-            64: [60,0,0],
-            93: [73,0,0],
-            95: [75,0,0],
-            99: [78,0,0],
+            17: GreenSnake(7),
+            54: Snake(34),
+            62: Snake(19),
+            64: Snake(60),
+            93: Snake(73),
+            95: Snake(75),
+            99: Snake(78),
         }
 
         self.ladders = {
@@ -36,9 +59,7 @@ class Board:
 
     def has_snake(self, pos):
         if pos in self.snakes:
-            if self.snakes[pos][1]==1 and self.snakes[pos][2] == 1:
-                return False
-            return True
+            return self.snakes[pos].is_alive()
         return False
 
     def has_ladder(self, pos):
@@ -46,9 +67,7 @@ class Board:
 
     def get_snake_tail(self, pos):
         if self.has_snake(pos):
-            if self.snakes[pos][1] == 1:
-                self.snakes[pos][2] = 1
-            return self.snakes[pos][0]
+            return self.snakes[pos].get_tail()
         else:
             raise SnakeNotFoundError(f"Snake not found at pos, {pos}")
 

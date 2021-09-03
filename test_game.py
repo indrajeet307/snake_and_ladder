@@ -9,7 +9,8 @@ class TestGame(unittest.TestCase):
     def test_board_can_tell_snake_pos(self):
         board = game.Board()
 
-        board.snakes = {51: [23,0,0], 24: [7,0,0]}
+        board.snakes = {51: game.Snake(23)
+                , 24: game.Snake(7)}
 
         self.assertTrue(board.has_snake(51))
         self.assertFalse(board.has_snake(4))
@@ -32,8 +33,8 @@ class TestGame(unittest.TestCase):
     def test_board_can_tell_snake_tail(self):
         board = game.Board()
         board.snakes = {
-            5: [3,0,0],
-            7: [4,0,0],
+            5: game.Snake(3),
+            7: game.Snake(4),
         }
 
         self.assertEqual(board.get_snake_tail(5), 3)
@@ -49,8 +50,8 @@ class TestGame(unittest.TestCase):
     def test_board_raises_error_for_wrong_snake_pos(self):
         board = game.Board()
         board.snakes = {
-            5: [3,0,0],
-            7: [4,0,0],
+            5: game.Snake(3),
+            7: game.Snake(4),
         }
 
         with self.assertRaises(game.SnakeNotFoundError):
@@ -67,11 +68,13 @@ class TestGame(unittest.TestCase):
 
     def test_green_snake(self):
         board = game.Board()
+        snake = game.GreenSnake(7)
         board.snakes = {
-                    17: [7, 1, 0],
+                    17: snake,
                 }
 
         self.assertTrue(board.has_snake(17))
         self.assertEqual(7, board.get_snake_tail(17))
 
+        self.assertFalse(snake.is_alive())
         self.assertFalse(board.has_snake(17))
